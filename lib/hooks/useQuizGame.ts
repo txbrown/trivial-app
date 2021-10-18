@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
   CorrectAnswer,
-  GameQuestionsResponse,
   Question
 } from "../../types/api";
 import quizService from "../services/quiz-service";
