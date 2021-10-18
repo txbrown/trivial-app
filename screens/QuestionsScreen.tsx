@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/core";
+import { useNavigation, useRoute } from "@react-navigation/core";
 import React, { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, IconButton, Text } from "react-native-paper";
@@ -7,7 +7,7 @@ import Layout from "../components/Layout";
 import LoadingView from "../components/LoadingView";
 import QuestionBox from "../components/QuestionBox";
 import useQuizGame from "../lib/hooks/useQuizGame";
-import { QuestionsScreenNavigationProp } from "../navigation/types";
+import { QuestionScreenRouteProp, QuestionsScreenNavigationProp } from "../navigation/types";
 
 interface Props {}
 
@@ -37,9 +37,11 @@ const QuestionsScreen: React.FunctionComponent<Props> = (props) => {
     refetchGameData,
     answerQuestion,
     isFinished,
-    questionAnswers
+    questionAnswers,
+    resetGame
   } = useQuizGame();
-  const { navigate } = useNavigation<QuestionsScreenNavigationProp>();
+  const { navigate, addListener } = useNavigation<QuestionsScreenNavigationProp>();
+  const { params } = useRoute<QuestionScreenRouteProp>();
 
   useEffect(() => {
     if (isFinished) {
@@ -47,7 +49,18 @@ const QuestionsScreen: React.FunctionComponent<Props> = (props) => {
     }
   }, [isFinished]);
 
-  if (error) return <ErrorView message={error} onTryAgain={refetchGameData} />;
+  useEffect(() => {
+    const unsub = addListener("focus", () => {
+      if(params?.reset){
+        resetGame()
+      }
+    })
+    
+    return unsub
+  },[addListener, params?.reset])
+
+  if(error) return <ErrorView message={error} onTryAgain={refetchGameData} />;
+  
   if (loading) return <LoadingView />;
 
   return (

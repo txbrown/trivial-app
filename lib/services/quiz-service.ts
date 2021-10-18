@@ -10,6 +10,7 @@ type Options = {
   type?: "multiple" | "boolean";
   difficulty?: "easy" | "hard";
   category?: number;
+  amount?: number
 };
 
 class QuizService {

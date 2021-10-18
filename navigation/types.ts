@@ -8,7 +8,9 @@ export type TrainingSessionStackParamList = {
 
 export type RootStackParamList = {
   Welcome: undefined;
-  Questions: undefined;
+  Questions?: {
+    reset?: boolean
+  };
   Score: {
     answers: Answers;
     questions: Question[];
@@ -31,3 +33,4 @@ export type ScoreScreenNavigationProp = NavigationProp<
 >;
 
 export type ScoreScreenRouteProp = RouteProp<RootStackParamList, "Score">;
+export type QuestionScreenRouteProp = RouteProp<RootStackParamList, "Questions">;

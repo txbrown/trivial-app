@@ -8,6 +8,7 @@ import quizService from "../services/quiz-service";
 type Answers = {
   [key: number]: keyof typeof CorrectAnswer;
 };
+
 const useQuizGame = () => {
   const [error, setError] = useState("");
   const [gameData, setGameData] = useState<Question[]>([]);
@@ -20,7 +21,7 @@ const useQuizGame = () => {
     setError("");
     setLoading(true);
     try {
-      const data = await quizService.getQuestions();
+      const data = await quizService.getQuestions({amount:15, difficulty:"hard", type:"boolean"});
       setGameData(data);
     } catch (error) {
       setError("Ups, something went wrong. Please try again.");
@@ -44,6 +45,14 @@ const useQuizGame = () => {
     });
   };
 
+  const resetGame = () => {
+    setError("")
+    setCurrentIndex(0)
+    setIsFinished(false)
+    setLoading(false)
+    setQuestionAnswers([])
+  }
+
   useEffect(() => {
     fetchGameData();
   }, []);
@@ -55,10 +64,11 @@ const useQuizGame = () => {
     totalQuestions: gameData?.length || 0,
     current: currentIndex + 1,
     currentQuestion: gameData[currentIndex],
+    questionAnswers,
+    isFinished,
     refetchGameData: fetchGameData,
     answerQuestion,
-    questionAnswers,
-    isFinished
+    resetGame,
   };
 };
 
