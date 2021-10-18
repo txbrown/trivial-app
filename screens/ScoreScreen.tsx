@@ -25,7 +25,7 @@ const ScoreScreen: React.FunctionComponent<IScoreScreenProps> = (props) => {
   const correctAnswers = getNumCorrectAnswers(answers, questions);
 
   const handlePlayAgain = () => {
-    navigate("Questions", {reset: true})
+    navigate("Welcome")
   }
 
   return (
